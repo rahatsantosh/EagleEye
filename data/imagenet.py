@@ -5,32 +5,29 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
 
-def get_dataloaders(batch_size, n_workers, path=""):
+def custom_get_dataloaders(batch_size, n_workers, path=""):
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
-    train_dataset = datasets.ImageFolder(
-        osp.join(path, "train"),
-        transforms.Compose(
+    transforms = transforms.Compose(
             [
+                transforms.Resize(224),
                 transforms.RandomResizedCrop(224),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
-                normalize,
+                normalize
             ]
-        ),
+    )
+    train_dataset = torchvision.datasets.CIFAR10(
+        train=True,
+        download=True,
+        transforms=transforms
     )
 
-    test_dataset = datasets.ImageFolder(
-        osp.join(path, "val"),
-        transforms.Compose(
-            [
-                transforms.Resize(256),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                normalize,
-            ]
-        ),
+    test_dataset = torchvision.datasets.CIFAR10(
+        train=False,
+        download=True,
+        transforms=transforms
     )
 
     dataloader_train = torch.utils.data.DataLoader(
