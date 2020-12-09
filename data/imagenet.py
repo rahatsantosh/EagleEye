@@ -6,15 +6,15 @@ import torchvision.datasets as datasets
 
 
 def custom_get_dataloaders(opt):
-    normalize = transforms.Normalize(
+    normalize = torchvision.transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
-    transforms = transforms.Compose(
+    transforms = torchvision.transforms.Compose(
             [
-                transforms.Resize(224),
-                transforms.RandomResizedCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
+                torchvision.transforms.Resize(224),
+                torchvision.transforms.RandomResizedCrop(224),
+                torchvision.transforms.RandomHorizontalFlip(),
+                torchvision.transforms.ToTensor(),
                 normalize
             ]
     )
