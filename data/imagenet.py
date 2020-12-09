@@ -21,13 +21,13 @@ def custom_get_dataloaders(opt):
     train_dataset = torchvision.datasets.CIFAR10(
         train=True,
         download=True,
-        transforms=transforms
+        transform=transforms
     )
 
     test_dataset = torchvision.datasets.CIFAR10(
         train=False,
         download=True,
-        transforms=transforms
+        transform=transforms
     )
 
     dataloader_train = torch.utils.data.DataLoader(
