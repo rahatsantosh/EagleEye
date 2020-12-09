@@ -69,11 +69,7 @@ def main(opt):
     )
 
     ###### Adaptive-BN-based Candidate Evaluation of Pruning Strategy ###
-    try:
-        thinning(net, compression_scheduler, input_tensor=dummy_input)
-    except:
-        print('[WARNING] This pruning strategy is invalid for distiller thinning module, pass it.')
-        return
+    thinning(net, compression_scheduler, input_tensor=dummy_input)
 
     flops_after, params_after = model_summary(net.get_compress_part(), dummy_input)
     ratio = flops_after / flops_before
@@ -106,5 +102,4 @@ def main(opt):
 if __name__ == "__main__":
     # get options
     opt = BaseOptions().parse()
-    while True:
-        main(opt)
+    main(opt)
