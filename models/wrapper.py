@@ -23,6 +23,9 @@ class ModelWrapper(nn.Module):
             from .mobilenet import MobileNet
 
             self._net = MobileNet(num_classes=opt.num_classes)
+        elif opt.model_name == "mobilenetv2":
+            self._net = torch.hub.load('pytorch/vision:v0.6.0', 'mobilenet_v2', pretrained=True)
+            self._net.classifier[1] = torch.nn.Linear(in_features=1280, out_features=10, bias=True)
         elif opt.model_name == "resnet50":
             from .resnet import resnet50
 
