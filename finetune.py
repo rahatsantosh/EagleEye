@@ -87,7 +87,7 @@ def main(opt):
 
     #####################  Create Baseline Model  ####################
     net = ModelWrapper(opt)
-    net.load_state_dict(torch.load(opt.checkpoint))
+    net.load_checkpoint(opt.checkpoint)
     flops_before, params_before = model_summary(net.get_compress_part(), dummy_input)
 
     #####################  Load Pruning Strategy ###############
