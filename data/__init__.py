@@ -14,6 +14,6 @@ def custom_get_dataloaders(opt):
     datasetlib = importlib.import_module(dataset_filename)
     # find method named `get_dataloaders`
     for name, method in datasetlib.__dict__.items():
-        if name.lower() == "get_dataloaders":
+        if name.lower() == "custom_get_dataloaders":
             get_data_func = method
-    return get_data_func(opt.batch_size, opt.num_workers, path=opt.dataset_path)
+    return get_data_func(opt)
