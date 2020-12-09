@@ -15,6 +15,30 @@ import shutil
 import torch.optim as optim
 import numpy as np
 
+def open_model_txt(path):
+    data_dict = {}
+    fin = open(path, 'r')
+    i = 0
+    odd = 1
+    prev_key = None
+    while True:
+        s = fin.readline().strip()
+        if not s:
+            break
+        if odd:
+            prev_key = s
+        else:
+            print('Iter', i)
+            val = eval(s)
+            if type(val) != type([]):
+                data_dict[prev_key] = torch.FloatTensor([eval(s)])[0]
+            else:
+                data_dict[prev_key] = torch.FloatTensor(eval(s))
+            i += 1
+        odd = (odd + 1) % 2
+
+    return data_dict
+
 
 class ModelWrapper(nn.Module):
     def __init__(self, opt):
@@ -102,7 +126,7 @@ class ModelWrapper(nn.Module):
         Function to load pruned model or normal model checkpoint.
         :param str checkpoint_file: path to checkpoint file, such as `models/ckpt/mobilenet.pth`
         """
-        checkpoint = torch.load(checkpoint_file, map_location="cpu")
+        checkpoint = open_model_txt(checkpoint_file)
         net = self.get_compress_part()
         #### load pruned model ####
         for key, module in net.named_modules():
