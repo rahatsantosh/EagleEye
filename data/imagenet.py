@@ -19,12 +19,14 @@ def custom_get_dataloaders(opt):
             ]
     )
     train_dataset = torchvision.datasets.CIFAR10(
+        root = '.',
         train=True,
         download=True,
         transform=transforms
     )
 
     test_dataset = torchvision.datasets.CIFAR10(
+        root = '.',
         train=False,
         download=True,
         transform=transforms
