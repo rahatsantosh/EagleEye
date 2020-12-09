@@ -68,26 +68,21 @@ class SummaryGraph(object):
     is an internal representation of the model.  We then use ONNX to "clean" this
     representation.  After builiding a new representation of the graph, we can print
     it to a table, a PNG, add information to nodes, etc.
-
     The trace is a C++ component and the API is not documented, so we need to dig into some
     Pytorch internals code to understand how to get the info we need.
     https://github.com/pytorch/pytorch/blob/master/torch/onnx/__init__.py
     https://github.com/pytorch/pytorch/blob/master/torch/onnx/symbolic.py
-
     We think that using the trace output to generate a representation of the graph, is
     the best method available in Pytorch, due to the module's dynamic nature.
     Pytorch's module API naturally ignores layers/operations which are implemented as
     torch.autograd.Function, without an nn.Module.  For example:
         out = F.relu(self.bn1(self.conv1(x)))
-
     Another case where traversing the nn.Module API is not sufficient to create a
     representation of the graph, is the same nn.Module is used several times in the
     graph.  For example:
-
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)    <=== First use of self.relu
-
         out = self.conv2(out)
         out = self.bn2(out)
         out = self.relu(out)    <=== Second use of self.relu
@@ -98,7 +93,7 @@ class SummaryGraph(object):
     def __init__(self, model, dummy_input):
         self._src_model = model
         model_clone = distiller.make_non_parallel_copy(model)
-        with torch.onnx.select_model_mode_for_export(model_clone, False):
+        with torch.onnx.set_training(model_clone, False):
 
             device = next(model_clone.parameters()).device
             dummy_input = distiller.convert_tensors_recursively_to(
@@ -432,11 +427,9 @@ class SummaryGraph(object):
 
     def successors_f(self, node_name, successors_types, done_list=None, logging=None):
         """Returns a list of <op>'s successors, if they match the <successors_types> criteria.
-
         Traverse the graph, starting at node <node_name>, and search for successor
         nodes, that have one of the node types listed in <successors_types>.
         If none is found, then return an empty list.
-
         <node_name> and the returned list of successors are strings, because
         """
         node_name = distiller.normalize_module_name(node_name)
