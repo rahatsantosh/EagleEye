@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
 
-def custom_get_dataloaders(batch_size, n_workers, path=""):
+def custom_get_dataloaders(opt):
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
@@ -32,16 +32,16 @@ def custom_get_dataloaders(batch_size, n_workers, path=""):
 
     dataloader_train = torch.utils.data.DataLoader(
         train_dataset,
-        batch_size=batch_size,
+        batch_size=opt.batch_size,
         shuffle=True,
-        num_workers=n_workers,
+        num_workers=opt.num_workers,
         pin_memory=True,
     )
     dataloader_test = torch.utils.data.DataLoader(
         test_dataset,
-        batch_size=batch_size,
+        batch_size=opt.batch_size,
         shuffle=False,
-        num_workers=n_workers,
+        num_workers=opt.num_workers,
         pin_memory=True,
     )
     return dataloader_train, dataloader_test
