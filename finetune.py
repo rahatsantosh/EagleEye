@@ -10,7 +10,7 @@ import torch.optim as optim
 from options.base_options import BaseOptions
 from models.wrapper import ModelWrapper
 from report import model_summary, Reporter
-from data import custom_get_dataloaders
+from data.imagenet import custom_get_dataloaders
 import torch.nn as nn
 from tqdm import tqdm
 import random
